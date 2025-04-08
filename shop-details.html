@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop Details - SpareWear</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2a9d8f;
+            --secondary: #e76f51;
+            --light: #f8f9fa;
+            --dark: #264653;
+            --beige: #f4f1de;
+            --accent: #e9c46a;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo span {
+            color: var(--secondary);
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 25px;
+        }
+        
+        .nav-links a {
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        /* Shop Details Page */
+        .shop-header {
+            background-color: var(--beige);
+            padding: 40px 0;
+            margin-bottom: 40px;
+        }
+
+        .shop-header-content {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .shop-image {
+            width: 300px;
+            height: 200px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.1);
+        }
+
+        .shop-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .shop-info {
+            flex: 1;
+        }
+
+        .shop-title {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+
+        .shop-location {
+            display: flex;
+            align-items: center;
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .shop-location i {
+            margin-right: 10px;
+            color: var(--primary);
+        }
+
+        .shop-categories {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .category-tag {
+            background-color: var(--primary);
+            color: white;
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        .category-tag.men {
+            background-color: #2a9d8f;
+        }
+
+        .category-tag.women {
+            background-color: #e76f51;
+        }
+
+        .category-tag.kids {
+            background-color: #e9c46a;
+            color: var(--dark);
+        }
+
+        .category-tag.accessories {
+            background-color: #264653;
+        }
+
+        .owner-info {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .owner-info h3 {
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+
+        .owner-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .owner-detail {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .owner-detail i {
+            color: var(--primary);
+            font-size: 1.2rem;
+        }
+
+        .products-section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--dark);
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 25px;
+        }
+
+        .product-card {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .product-image {
+            height: 200px;
+            background-color: #eee;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .product-info {
+            padding: 20px;
+        }
+
+        .product-title {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+
+        .product-price {
+            color: var(--primary);
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        .product-description {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-weight: 500;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #238177;
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .shop-header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .shop-image {
+                width: 100%;
+                max-width: 400px;
+            }
+
+            .shop-categories {
+                justify-content: center;
+            }
+
+            .owner-details {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <a href="ecommerce.html" class="logo">Spare<span>Wear</span></a>
+                <ul class="nav-links">
+                    <li><a href="ecommerce.html">Home</a></li>
+                    <li><a href="shops.html">Browse Shops</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Shop Details -->
+    <section class="shop-header">
+        <div class="container">
+            <div class="shop-header-content">
+                <div class="shop-image">
+                    <img src="https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg" alt="Shop Image" id="shopImage">
+                </div>
+                <div class="shop-info">
+                    <h1 class="shop-title" id="shopTitle">Loading...</h1>
+                    <div class="shop-location">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span id="shopLocation">Loading...</span>
+                    </div>
+                    <div class="shop-categories" id="shopCategories">
+                        <!-- Categories will be added here dynamically -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <!-- Owner Information -->
+        <section class="owner-info">
+            <h3>Shop Owner Information</h3>
+            <div class="owner-details">
+                <div class="owner-detail">
+                    <i class="fas fa-user"></i>
+                    <span id="ownerName">Loading...</span>
+                </div>
+                <div class="owner-detail">
+                    <i class="fas fa-phone"></i>
+                    <span id="ownerPhone">Loading...</span>
+                </div>
+                <div class="owner-detail">
+                    <i class="fas fa-envelope"></i>
+                    <span id="ownerEmail">Loading...</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Products Section -->
+        <section class="products-section">
+            <h2 class="section-title">Available Products</h2>
+            <div class="products-grid" id="productsGrid">
+                <!-- Products will be added here dynamically -->
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Sample shop data
+        const shops = {
+            1: {
+                name: "Fashion Point",
+                location: "Anna Nagar, Madurai",
+                categories: ["men", "accessories"],
+                owner: {
+                    name: "Rajesh Kumar",
+                    phone: "+91 9876543210",
+                    email: "rajesh@fashionpoint.com"
+                },
+                products: [
+                    {
+                        name: "Men's Casual T-shirt",
+                        price: "₹599",
+                        description: "Comfortable cotton t-shirt for casual wear",
+                        image: "https://images.pexels.com/photos/428340/pexels-photo-428340.jpeg"
+                    },
+                    {
+                        name: "Denim Jeans",
+                        price: "₹1299",
+                        description: "Classic blue denim jeans with modern fit",
+                        image: "https://images.pexels.com/photos/1598507/pexels-photo-1598507.jpeg"
+                    },
+                    {
+                        name: "Formal Shirt",
+                        price: "₹899",
+                        description: "Premium quality formal shirt for office wear",
+                        image: "https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg"
+                    },
+                    {
+                        name: "Leather Wallet",
+                        price: "₹499",
+                        description: "Genuine leather wallet with multiple compartments",
+                        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTius9IvrmRSLEEWiQRpSuo1qge1rsfsCPGLw&s"
+                    }
+                ]
+            },
+            2: {
+                name: "Trendy Threads",
+                location: "Main Street, Krishnankoil",
+                categories: ["women", "accessories"],
+                owner: {
+                    name: "Priya Sharma",
+                    phone: "+91 8765432109",
+                    email: "priya@trendythreads.com"
+                },
+                products: [
+                    {
+                        name: "Floral Dress",
+                        price: "₹1299",
+                        description: "Beautiful floral print dress for summer",
+                        image: "https://images.pexels.com/photos/1021693/pexels-photo-1021693.jpeg"
+                    },
+                    {
+                        name: "Casual Top",
+                        price: "₹699",
+                        description: "Comfortable cotton top for everyday wear",
+                        image: "https://images.pexels.com/photos/1021693/pexels-photo-1021693.jpeg"
+                    },
+                    {
+                        name: "Designer Saree",
+                        price: "₹2999",
+                        description: "Elegant designer saree for special occasions",
+                        image: "https://images.pexels.com/photos/1021693/pexels-photo-1021693.jpeg"
+                    },
+                    {
+                        name: "Jewelry Set",
+                        price: "₹899",
+                        description: "Matching jewelry set for traditional wear",
+                        image: "https://images.pexels.com/photos/1021693/pexels-photo-1021693.jpeg"
+                    }
+                ]
+            },
+            3: {
+                name: "Kids Corner",
+                location: "Temple Street, Srivilliputhur",
+                categories: ["kids"],
+                owner: {
+                    name: "Arun Kumar",
+                    phone: "+91 7654321098",
+                    email: "arun@kidscorner.com"
+                },
+                products: [
+                    {
+                        name: "Kids T-shirt",
+                        price: "₹399",
+                        description: "Colorful t-shirt for kids",
+                        image: "https://images.pexels.com/photos/1021693/pexels-photo-1021693.jpeg"
+                    },
+                    {
+                        name: "School Uniform",
+                        price: "₹799",
+                        description: "Complete school uniform set",
+                        image: "https://images.pexels.com/photos/1021693/pexels-photo-1021693.jpeg"
+                    },
+                    {
+                        name: "Kids Jeans",
+                        price: "₹599",
+                        description: "Durable jeans for active kids",
+                        image: "https://images.pexels.com/photos/1021693/pexels-photo-1021693.jpeg"
+                    },
+                    {
+                        name: "Kids Backpack",
+                        price: "₹499",
+                        description: "Colorful backpack for school",
+                        image: "https://images.pexels.com/photos/1021693/pexels-photo-1021693.jpeg"
+                    }
+                ]
+            },
+            4: {
+                name: "Urban Style",
+                location: "Market Road, Rajapalayam",
+                categories: ["women", "accessories"],
+                owner: {
+                    name: "Meena Devi",
+                    phone: "+91 6543210987",
+                    email: "meena@urbanstyle.com"
+                },
+                products: [
+                    {
+                        name: "Women's Top",
+                        price: "₹799",
+                        description: "Stylish top for casual wear",
+                        image: "https://images.pexels.com/photos/1021693/pexels-photo-1021693.jpeg"
+                    },
+                    {
+                        name: "Skirt",
+                        price: "₹999",
+                        description: "Elegant skirt for formal occasions",
+                        image: "https://images.pexels.com/photos/1021693/pexels-photo-1021693.jpeg"
+                    },
+                    {
+                        name: "Handbag",
+                        price: "₹1299",
+                        description: "Trendy handbag for everyday use",
+                        image: "https://images.pexels.com/photos/1021693/pexels-photo-1021693.jpeg"
+                    },
+                    {
+                        name: "Scarf",
+                        price: "₹399",
+                        description: "Silk scarf for accessorizing",
+                        image: "https://images.pexels.com/photos/1021693/pexels-photo-1021693.jpeg"
+                    }
+                ]
+            },
+            5: {
+                name: "Saree Paradise",
+                location: "East Masi Street, Madurai",
+                categories: ["women"],
+                owner: {
+                    name: "Lakshmi Devi",
+                    phone: "+91 9876543212",
+                    email: "lakshmi@sareeparadise.com"
+                },
+                products: [
+                    {
+                        name: "Silk Saree",
+                        price: "₹5999",
+                        description: "Pure silk saree with traditional designs",
+                        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNcRw6cKoNEwsC_A6hxY3Jg6Y12sQYlG_F_g&s"
+                    },
+                    {
+                        name: "Designer Blouse",
+                        price: "₹1299",
+                        description: "Embroidered designer blouse",
+                        image: "https://img.faballey.com/images/Product/ITP01527Z/d3.jpg"
+                    },
+                    {
+                        name: "Cotton Kurti",
+                        price: "₹899",
+                        description: "Comfortable cotton kurti with prints",
+                        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQXHrTMILDBWTEKGabmLfLql3kIRrwp1eREJA&s"
+                    },
+                    {
+                        name: "Party Wear Saree",
+                        price: "₹3999",
+                        description: "Elegant party wear saree",
+                        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR8fJCU5u4kPj7q1MYu0rb_nGptN5I-b4vVXQ&s"
+                    }
+                ]
+            },
+            6: {
+                name: "Little Stars",
+                location: "K.K. Nagar, Madurai",
+                categories: ["kids"],
+                owner: {
+                    name: "Ravi Kumar",
+                    phone: "+91 8765432110",
+                    email: "ravi@littlestars.com"
+                },
+                products: [
+                    {
+                        name: "Kids Party Dress",
+                        price: "₹1299",
+                        description: "Beautiful party wear dress for kids",
+                        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRJ-0W3JJ6MM1TMOL6Fo8mei4SEH11DrvJ_XA&s"
+                    },
+                    {
+                        name: "School Uniform Set",
+                        price: "₹899",
+                        description: "Complete school uniform set",
+                        image: "https://img4.dhresource.com/webp/m/0x0/f3/albu/jc/y/24/c995a84f-10b0-41e9-ae46-206831a50a32.jpg"
+                    },
+                    {
+                        name: "Baby Romper",
+                        price: "₹499",
+                        description: "Comfortable romper for babies",
+                        image: "https://babymoo.in/cdn/shop/files/26.jpg?v=1719855168&width=1500"
+                    },
+                    {
+                        name: "Kids Ethnic Wear",
+                        price: "₹1499",
+                        description: "Traditional ethnic wear for festivals",
+                        image: "https://www.kalkifashion.com/blogs/wp-content/uploads/2022/02/photo_2022-01-28_14-52-06-Blog3.jpg"
+                    }
+                ]
+            },
+            7: {
+                name: "Gents World",
+                location: "Temple Road, Krishnankoil",
+                categories: ["men"],
+                owner: {
+                    name: "Senthil Kumar",
+                    phone: "+91 7654321099",
+                    email: "senthil@gentsworld.com"
+                },
+                products: [
+                    {
+                        name: "Formal Shirt",
+                        price: "₹999",
+                        description: "Premium formal shirt for office wear",
+                        image: "https://assets.ajio.com/medias/sys_master/root/20231012/cJFi/6528297eddf779151938200b/-473Wx593H-469514981-darkblue-MODEL.jpg"
+                    },
+                    {
+                        name: "Cotton Trousers",
+                        price: "₹1299",
+                        description: "Comfortable cotton trousers",
+                        image: "https://www.zodiaconline.com/media/catalog/product/z/o/zodiac_trousers_mantova1_tf_z_100_cotton_pln_001_f_frnt_na_mustard_72_72cm_28inch_0_z_1.jpg?resize.width=500"
+                    },
+                    {
+                        name: "Traditional Dhoti",
+                        price: "₹599",
+                        description: "Pure cotton dhoti",
+                        image: "https://ramrajcotton.in/cdn/shop/files/241019_Ramraj_e-com11317_5a0ea4d5-f86c-4198-bedd-87eead3132f2.jpg?v=1738065339"
+                    },
+                    {
+                        name: "Silk Shirt",
+                        price: "₹1499",
+                        description: "Pure silk shirt for special occasions",
+                        image: "https://apisap.fabindia.com/medias/20028738-1.jpg?context=bWFzdGVyfGltYWdlc3wxMDUyMDJ8aW1hZ2UvanBlZ3xhR0poTDJnM1lTODVNalEwTkRVNU5UTXlNekU0THpJd01ESTROek00WHpFdWFuQm58M2I4NmJhZmE4NzMyOGVlMDJkNTZiNWY1ZjVjMDAwNDczZGY5NzEwNGM2NzgwM2IxYzU0ZTljOWNjNThlMDBmNg"
+                    }
+                ]
+            },
+            8: {
+                name: "Kids Fashion Hub",
+                location: "Market Street, Krishnankoil",
+                categories: ["kids", "accessories"],
+                owner: {
+                    name: "Anitha Raj",
+                    phone: "+91 9876543213",
+                    email: "anitha@kidsfashionhub.com"
+                },
+                products: [
+                    {
+                        name: "School Bag",
+                        price: "₹799",
+                        description: "Durable school bag with multiple compartments",
+                        image: "https://images.pexels.com/photos/1021693/pexels-photo-1021693.jpeg"
+                    },
+                    {
+                        name: "Hair Accessories Set",
+                        price: "₹299",
+                        description: "Colorful hair clips and bands set",
+                        image: "https://images.pexels.com/photos/1021693/pexels-photo-1021693.jpeg"
+                    },
+                    {
+                        name: "Kids Watch",
+                        price: "₹499",
+                        description: "Cartoon character watch for kids",
+                        image: "https://images.pexels.com/photos/1021693/pexels-photo-1021693.jpeg"
+                    },
+                    {
+                        name: "Kids Jewelry Set",
+                        price: "₹399",
+                        description: "Fancy jewelry set for kids",
+                        image: "https://images.pexels.com/photos/1021693/pexels-photo-1021693.jpeg"
+                    }
+                ]
+            },
+            9: {
+                name: "Family Fashion",
+                location: "Main Road, Srivilliputhur",
+                categories: ["men", "women"],
+                owner: {
+                    name: "Ramesh Kumar",
+                    phone: "+91 8765432111",
+                    email: "ramesh@familyfashion.com"
+                },
+                products: [
+                    {
+                        name: "Family Traditional Set",
+                        price: "₹4999",
+                        description: "Matching traditional wear for family",
+                        image: "https://images.pexels.com/photos/1021693/pexels-photo-1021693.jpeg"
+                    },
+                    {
+                        name: "Festival Collection",
+                        price: "₹2999",
+                        description: "Special festival wear collection",
+                        image: "https://images.pexels.com/photos/1021693/pexels-photo-1021693.jpeg"
+                    },
+                    {
+                        name: "Couple Dress Set",
+                        price: "₹3499",
+                        description: "Matching dress set for couples",
+                        image: "https://images.pexels.com/photos/1021693/pexels-photo-1021693.jpeg"
+                    },
+                    {
+                        name: "Wedding Collection",
+                        price: "₹5999",
+                        description: "Special wedding wear collection",
+                        image: "https://images.pexels.com/photos/1021693/pexels-photo-1021693.jpeg"
+                    }
+                ]
+            },
+            10: {
+                name: "Style Hub",
+                location: "Gandhi Road, Srivilliputhur",
+                categories: ["accessories"],
+                owner: {
+                    name: "Kavitha Rajan",
+                    phone: "+91 7654321100",
+                    email: "kavitha@stylehub.com"
+                },
+                products: [
+                    {
+                        name: "Designer Jewelry Set",
+                        price: "₹1999",
+                        description: "Premium designer jewelry set",
+                        image: "https://images.pexels.com/photos/1021693/pexels-photo-1021693.jpeg"
+                    },
+                    {
+                        name: "Leather Handbag",
+                        price: "₹2499",
+                        description: "Genuine leather handbag",
+                        image: "https://images.pexels.com/photos/1021693/pexels-photo-1021693.jpeg"
+                    },
+                    {
+                        name: "Fashion Footwear",
+                        price: "₹999",
+                        description: "Trendy footwear collection",
+                        image: "https://images.pexels.com/photos/1021693/pexels-photo-1021693.jpeg"
+                    },
+                    {
+                        name: "Sunglasses",
+                        price: "₹799",
+                        description: "Designer sunglasses",
+                        image: "https://images.pexels.com/photos/1021693/pexels-photo-1021693.jpeg"
+                    }
+                ]
+            },
+            11: {
+                name: "Men's Choice",
+                location: "College Road, Rajapalayam",
+                categories: ["men"],
+                owner: {
+                    name: "Murugan Kumar",
+                    phone: "+91 9876543214",
+                    email: "murugan@menschoice.com"
+                },
+                products: [
+                    {
+                        name: "Formal Suit",
+                        price: "₹7999",
+                        description: "Premium formal suit set",
+                        image: "https://images.pexels.com/photos/1021693/pexels-photo-1021693.jpeg"
+                    },
+                    {
+                        name: "Casual Wear Set",
+                        price: "₹2499",
+                        description: "Complete casual wear set",
+                        image: "https://images.pexels.com/photos/1021693/pexels-photo-1021693.jpeg"
+                    },
+                    {
+                        name: "Ethnic Collection",
+                        price: "₹3999",
+                        description: "Traditional ethnic wear collection",
+                        image: "https://images.pexels.com/photos/1021693/pexels-photo-1021693.jpeg"
+                    },
+                    {
+                        name: "Party Wear",
+                        price: "₹4999",
+                        description: "Stylish party wear collection",
+                        image: "https://images.pexels.com/photos/1021693/pexels-photo-1021693.jpeg"
+                    }
+                ]
+            },
+            12: {
+                name: "Kids Paradise",
+                location: "New Bus Stand, Rajapalayam",
+                categories: ["kids"],
+                owner: {
+                    name: "Sathya Priya",
+                    phone: "+91 8765432112",
+                    email: "sathya@kidsparadise.com"
+                },
+                products: [
+                    {
+                        name: "Kids Party Collection",
+                        price: "₹1999",
+                        description: "Complete party wear collection",
+                        image: "https://images.pexels.com/photos/1021693/pexels-photo-1021693.jpeg"
+                    },
+                    {
+                        name: "Baby Essentials Set",
+                        price: "₹1499",
+                        description: "Complete baby essentials set",
+                        image: "https://images.pexels.com/photos/1021693/pexels-photo-1021693.jpeg"
+                    },
+                    {
+                        name: "Kids Fashion Set",
+                        price: "₹2499",
+                        description: "Trendy fashion collection for kids",
+                        image: "https://images.pexels.com/photos/1021693/pexels-photo-1021693.jpeg"
+                    },
+                    {
+                        name: "Winter Collection",
+                        price: "₹1799",
+                        description: "Kids winter wear collection",
+                        image: "https://images.pexels.com/photos/1021693/pexels-photo-1021693.jpeg"
+                    }
+                ]
+            },
+            13: {
+                name: "Fashion Gallery",
+                location: "South Car Street, Tenkasi",
+                categories: ["men", "women"],
+                owner: {
+                    name: "Vijay Kumar",
+                    phone: "+91 7654321101",
+                    email: "vijay@fashiongallery.com"
+                },
+                products: [
+                    {
+                        name: "Designer Collection",
+                        price: "₹4999",
+                        description: "Premium designer wear collection",
+                        image: "https://images.pexels.com/photos/1021693/pexels-photo-1021693.jpeg"
+                    },
+                    {
+                        name: "Traditional Set",
+                        price: "₹3999",
+                        description: "Complete traditional wear set",
+                        image: "https://images.pexels.com/photos/1021693/pexels-photo-1021693.jpeg"
+                    },
+                    {
+                        name: "Western Wear",
+                        price: "₹2999",
+                        description: "Stylish western wear collection",
+                        image: "https://images.pexels.com/photos/1021693/pexels-photo-1021693.jpeg"
+                    },
+                    {
+                        name: "Party Collection",
+                        price: "₹5999",
+                        description: "Exclusive party wear collection",
+                        image: "https://images.pexels.com/photos/1021693/pexels-photo-1021693.jpeg"
+                    }
+                ]
+            },
+            14: {
+                name: "Kids World",
+                location: "Five Way Road, Tenkasi",
+                categories: ["kids", "accessories"],
+                owner: {
+                    name: "Deepa Raj",
+                    phone: "+91 9876543215",
+                    email: "deepa@kidsworld.com"
+                },
+                products: [
+                    {
+                        name: "Kids Clothing Set",
+                        price: "₹1999",
+                        description: "Complete clothing set for kids",
+                        image: "https://images.pexels.com/photos/1021693/pexels-photo-1021693.jpeg"
+                    },
+                    {
+                        name: "Toys Collection",
+                        price: "₹999",
+                        description: "Educational toys collection",
+                        image: "https://images.pexels.com/photos/1021693/pexels-photo-1021693.jpeg"
+                    },
+                    {
+                        name: "School Supplies",
+                        price: "₹799",
+                        description: "Complete school supplies set",
+                        image: "https://images.pexels.com/photos/1021693/pexels-photo-1021693.jpeg"
+                    },
+                    {
+                        name: "Kids Accessories",
+                        price: "₹599",
+                        description: "Trendy accessories for kids",
+                        image: "https://images.pexels.com/photos/1021693/pexels-photo-1021693.jpeg"
+                    }
+                ]
+            },
+            15: {
+                name: "Ladies Corner",
+                location: "Railway Station Road, Tenkasi",
+                categories: ["women"],
+                owner: {
+                    name: "Geetha Lakshmi",
+                    phone: "+91 8765432113",
+                    email: "geetha@ladiescorner.com"
+                },
+                products: [
+                    {
+                        name: "Designer Saree",
+                        price: "₹6999",
+                        description: "Exclusive designer saree collection",
+                        image: "https://images.pexels.com/photos/1021693/pexels-photo-1021693.jpeg"
+                    },
+                    {
+                        name: "Churidar Set",
+                        price: "₹2499",
+                        description: "Complete churidar set",
+                        image: "https://images.pexels.com/photos/1021693/pexels-photo-1021693.jpeg"
+                    },
+                    {
+                        name: "Western Collection",
+                        price: "₹3999",
+                        description: "Modern western wear collection",
+                        image: "https://images.pexels.com/photos/1021693/pexels-photo-1021693.jpeg"
+                    },
+                    {
+                        name: "Party Wear",
+                        price: "₹4999",
+                        description: "Elegant party wear collection",
+                        image: "https://images.pexels.com/photos/1021693/pexels-photo-1021693.jpeg"
+                    }
+                ]
+            }
+        };
+
+        // Get shop ID from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const shopId = urlParams.get('id');
+
+        // Load shop data
+        function loadShopData() {
+            const shop = shops[shopId];
+            if (!shop) {
+                document.body.innerHTML = `
+                    <header>
+                        <div class="container">
+                            <nav class="navbar">
+                                <a href="ecommerce.html" class="logo">Spare<span>Wear</span></a>
+                                <ul class="nav-links">
+                                    <li><a href="ecommerce.html">Home</a></li>
+                                    <li><a href="shops.html">Browse Shops</a></li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </header>
+                    <div class="container" style="text-align: center; padding: 50px;">
+                        <h1>Shop not found</h1>
+                        <p>The requested shop could not be found. Please try selecting a shop from the list.</p>
+                        <div style="margin-top: 20px;">
+                            <a href="ecommerce.html" class="btn" style="margin-right: 10px;">Go to Home</a>
+                            <a href="shops.html" class="btn btn-outline">Browse Shops</a>
+                        </div>
+                    </div>`;
+                return;
+            }
+
+            // Update shop header
+            document.getElementById('shopTitle').textContent = shop.name;
+            document.getElementById('shopLocation').textContent = shop.location;
+            document.getElementById('shopImage').src = shop.products[0].image;
+
+            // Update categories
+            const categoriesContainer = document.getElementById('shopCategories');
+            categoriesContainer.innerHTML = '';
+            shop.categories.forEach(category => {
+                const tag = document.createElement('span');
+                tag.className = `category-tag ${category}`;
+                tag.textContent = category === 'men' ? "Men's Clothing" :
+                                category === 'women' ? "Women's Clothing" :
+                                category === 'kids' ? "Kids' Clothing" :
+                                "Accessories";
+                categoriesContainer.appendChild(tag);
+            });
+
+            // Update owner information
+            document.getElementById('ownerName').textContent = shop.owner.name;
+            document.getElementById('ownerPhone').textContent = shop.owner.phone;
+            document.getElementById('ownerEmail').textContent = shop.owner.email;
+
+            // Update products
+            const productsGrid = document.getElementById('productsGrid');
+            productsGrid.innerHTML = '';
+            shop.products.forEach(product => {
+                const productCard = document.createElement('div');
+                productCard.className = 'product-card';
+                productCard.innerHTML = `
+                    <div class="product-image">
+                        <img src="${product.image}" alt="${product.name}">
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">${product.name}</h3>
+                        <div class="product-price">${product.price}</div>
+                        <p class="product-description">${product.description}</p>
+                        <button class="btn" onclick="addToCart('${shop.name}', '${product.name}', '${product.price}', '${product.image}')">Add to Cart</button>
+                    </div>
+                `;
+                productsGrid.appendChild(productCard);
+            });
+        }
+
+        // Add to Cart functionality
+        function addToCart(shopName, productName, price, image) {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            cart.push({
+                shopName: shopName,
+                productName: productName,
+                price: price,
+                image: image,
+                quantity: 1
+            });
+            localStorage.setItem('cart', JSON.stringify(cart));
+            window.location.href = 'cart.html';
+        }
+
+        // Load shop data when page loads
+        window.addEventListener('load', loadShopData);
+    </script>
+</body>
+</html> 

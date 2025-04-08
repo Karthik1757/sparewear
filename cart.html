@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart - SpareWear</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2a9d8f;
+            --secondary: #e76f51;
+            --light: #f8f9fa;
+            --dark: #264653;
+            --beige: #f4f1de;
+            --accent: #e9c46a;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo span {
+            color: var(--secondary);
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 25px;
+        }
+        
+        .nav-links a {
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        /* Cart Styles */
+        .cart-section {
+            padding: 40px 0;
+        }
+
+        .cart-title {
+            font-size: 2rem;
+            margin-bottom: 30px;
+            color: var(--dark);
+        }
+
+        .cart-items {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.1);
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+
+        .cart-item-image {
+            width: 100px;
+            height: 100px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-right: 20px;
+        }
+
+        .cart-item-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .cart-item-details {
+            flex: 1;
+        }
+
+        .cart-item-shop {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .cart-item-name {
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .cart-item-price {
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        .cart-item-quantity {
+            display: flex;
+            align-items: center;
+            margin: 0 20px;
+        }
+
+        .quantity-btn {
+            width: 30px;
+            height: 30px;
+            border: 1px solid #ddd;
+            background: none;
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .quantity-input {
+            width: 40px;
+            height: 30px;
+            text-align: center;
+            border: 1px solid #ddd;
+            margin: 0 5px;
+        }
+
+        .remove-item {
+            color: var(--secondary);
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+
+        .cart-summary {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.1);
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .summary-total {
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-top: 1px solid #eee;
+            padding-top: 10px;
+            margin-top: 10px;
+        }
+
+        .checkout-section {
+            margin-top: 30px;
+        }
+
+        .delivery-options {
+            margin-bottom: 20px;
+        }
+
+        .payment-options {
+            margin-bottom: 20px;
+        }
+
+        .option-group {
+            margin-bottom: 15px;
+        }
+
+        .option-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .option-group input[type="radio"] {
+            margin-right: 10px;
+        }
+
+        .delivery-address {
+            margin-bottom: 20px;
+        }
+
+        .address-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-weight: 500;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #238177;
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .empty-cart {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .empty-cart i {
+            font-size: 4rem;
+            color: #ddd;
+            margin-bottom: 20px;
+        }
+
+        .empty-cart h2 {
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+
+        .empty-cart p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <a href="ecommerce.html" class="logo">Spare<span>Wear</span></a>
+                <ul class="nav-links">
+                    <li><a href="ecommerce.html">Home</a></li>
+                    <li><a href="shops.html">Browse Shops</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Cart Section -->
+    <section class="cart-section">
+        <div class="container">
+            <h1 class="cart-title">Your Cart</h1>
+            
+            <div id="cartContent">
+                <!-- Cart items will be loaded here -->
+            </div>
+
+            <div class="checkout-section">
+                <div class="delivery-options">
+                    <h3>Delivery Options</h3>
+                    <div class="option-group">
+                        <label>
+                            <input type="radio" name="delivery" value="pickup" checked>
+                            Pickup from Store
+                        </label>
+                    </div>
+                    <div class="option-group">
+                        <label>
+                            <input type="radio" name="delivery" value="delivery">
+                            Home Delivery
+                        </label>
+                        <div class="delivery-address" style="display: none;">
+                            <input type="text" class="address-input" placeholder="Enter your delivery address">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="payment-options">
+                    <h3>Payment Method</h3>
+                    <div class="option-group">
+                        <label>
+                            <input type="radio" name="payment" value="cod" checked>
+                            Cash on Delivery
+                        </label>
+                    </div>
+                    <div class="option-group">
+                        <label>
+                            <input type="radio" name="payment" value="digital">
+                            Digital Payment (UPI/Card)
+                        </label>
+                    </div>
+                </div>
+
+                <div class="cart-summary">
+                    <div class="summary-row">
+                        <span>Subtotal</span>
+                        <span id="subtotal">₹0</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Delivery Charges</span>
+                        <span id="deliveryCharges">₹0</span>
+                    </div>
+                    <div class="summary-row summary-total">
+                        <span>Total</span>
+                        <span id="total">₹0</span>
+                    </div>
+                </div>
+
+                <button class="btn" style="width: 100%; margin-top: 20px;" onclick="placeOrder()">Place Order</button>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Load cart items
+        function loadCart() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const cartContent = document.getElementById('cartContent');
+            
+            if (cart.length === 0) {
+                cartContent.innerHTML = `
+                    <div class="empty-cart">
+                        <i class="fas fa-shopping-cart"></i>
+                        <h2>Your cart is empty</h2>
+                        <p>Looks like you haven't added any items to your cart yet.</p>
+                        <a href="shops.html" class="btn">Browse Shops</a>
+                    </div>
+                `;
+                document.querySelector('.checkout-section').style.display = 'none';
+                return;
+            }
+
+            let cartHTML = '<div class="cart-items">';
+            let subtotal = 0;
+
+            cart.forEach((item, index) => {
+                const price = parseInt(item.price.replace('₹', ''));
+                subtotal += price * item.quantity;
+                
+                cartHTML += `
+                    <div class="cart-item">
+                        <div class="cart-item-image">
+                            <img src="${item.image}" alt="${item.productName}">
+                        </div>
+                        <div class="cart-item-details">
+                            <div class="cart-item-shop">${item.shopName}</div>
+                            <div class="cart-item-name">${item.productName}</div>
+                            <div class="cart-item-price">${item.price}</div>
+                        </div>
+                        <div class="cart-item-quantity">
+                            <button class="quantity-btn" onclick="updateQuantity(${index}, -1)">-</button>
+                            <input type="text" class="quantity-input" value="${item.quantity}" readonly>
+                            <button class="quantity-btn" onclick="updateQuantity(${index}, 1)">+</button>
+                        </div>
+                        <div class="remove-item" onclick="removeItem(${index})">
+                            <i class="fas fa-trash"></i>
+                        </div>
+                    </div>
+                `;
+            });
+
+            cartHTML += '</div>';
+            cartContent.innerHTML = cartHTML;
+
+            // Update summary
+            document.getElementById('subtotal').textContent = `₹${subtotal}`;
+            const deliveryCharges = document.querySelector('input[name="delivery"]:checked').value === 'delivery' ? 50 : 0;
+            document.getElementById('deliveryCharges').textContent = `₹${deliveryCharges}`;
+            document.getElementById('total').textContent = `₹${subtotal + deliveryCharges}`;
+        }
+
+        // Update quantity
+        function updateQuantity(index, change) {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            cart[index].quantity = Math.max(1, cart[index].quantity + change);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            loadCart();
+        }
+
+        // Remove item
+        function removeItem(index) {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            cart.splice(index, 1);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            loadCart();
+        }
+
+        // Place order
+        function placeOrder() {
+            const deliveryMethod = document.querySelector('input[name="delivery"]:checked').value;
+            const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
+            const address = document.querySelector('.address-input')?.value;
+
+            if (deliveryMethod === 'delivery' && !address) {
+                alert('Please enter your delivery address');
+                return;
+            }
+
+            // Here you would typically send the order to your backend
+            alert('Order placed successfully!');
+            localStorage.removeItem('cart');
+            window.location.href = 'ecommerce.html';
+        }
+
+        // Event listeners
+        document.querySelectorAll('input[name="delivery"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                const addressInput = document.querySelector('.delivery-address');
+                addressInput.style.display = this.value === 'delivery' ? 'block' : 'none';
+                loadCart();
+            });
+        });
+
+        // Load cart when page loads
+        window.addEventListener('load', loadCart);
+    </script>
+</body>
+</html> 

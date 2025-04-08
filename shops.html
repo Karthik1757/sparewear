@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browse Shops - SpareWear</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2a9d8f;
+            --secondary: #e76f51;
+            --light: #f8f9fa;
+            --dark: #264653;
+            --beige: #f4f1de;
+            --accent: #e9c46a;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo span {
+            color: var(--secondary);
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 25px;
+        }
+        
+        .nav-links a {
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        /* Shop Listings Page */
+        .page-header {
+            background-color: var(--beige);
+            padding: 40px 0;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .page-header h1 {
+            font-size: 2.5rem;
+            color: var(--dark);
+            margin-bottom: 20px;
+        }
+
+        .shop-filters {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .filter-group {
+            flex-grow: 1;
+            max-width: 300px;
+        }
+        
+        .filter-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .filter-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        
+        .shop-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
+        }
+        
+        .shop-card {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+            display: none; /* Hide all cards by default */
+        }
+        
+        .shop-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .shop-image {
+            height: 180px;
+            background-color: #eee;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .shop-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .shop-info {
+            padding: 20px;
+        }
+        
+        .shop-info h3 {
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .shop-location {
+            display: flex;
+            align-items: center;
+            color: #666;
+            margin-bottom: 15px;
+        }
+        
+        .shop-location i {
+            margin-right: 5px;
+            color: var(--primary);
+        }
+        
+        .featured-items {
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+        }
+        
+        .featured-items strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .shop-categories {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+
+        .category-tag {
+            background-color: var(--primary);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            display: inline-block;
+        }
+
+        .category-tag.men {
+            background-color: #2a9d8f;
+        }
+
+        .category-tag.women {
+            background-color: #e76f51;
+        }
+
+        .category-tag.kids {
+            background-color: #e9c46a;
+            color: var(--dark);
+        }
+
+        .category-tag.accessories {
+            background-color: #264653;
+        }
+
+        .shop-card.show {
+            display: block; /* Show cards that match the filter */
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-weight: 500;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .btn:hover {
+            background-color: #238177;
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .shop-filters {
+                flex-direction: column;
+            }
+            
+            .filter-group {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <a href="ecommerce.html" class="logo">Spare<span>Wear</span></a>
+                <ul class="nav-links">
+                    <li><a href="ecommerce.html">Home</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1>Browse Local Shops</h1>
+            <p>Discover amazing local fashion stores in your area</p>
+        </div>
+    </section>
+
+    <!-- Shop Listings -->
+    <section class="shop-listings">
+        <div class="container">
+            <div class="shop-filters">
+                <div class="filter-group">
+                    <label for="category-filter">Category</label>
+                    <select id="category-filter">
+                        <option value="all">All Categories</option>
+                        <option value="men">Men's Clothing</option>
+                        <option value="women">Women's Clothing</option>
+                        <option value="kids">Kids' Clothing</option>
+                        <option value="accessories">Accessories</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="location-filter">Location</label>
+                    <select id="location-filter">
+                        <option value="all">All Locations</option>
+                        <option value="krishnankoil">Krishnankoil</option>
+                        <option value="madurai">Madurai</option>
+                        <option value="srivilliputhur">Srivilliputhur</option>
+                        <option value="rajapalayam">Rajapalayam</option>
+                        <option value="tenkasi">Tenkasi</option>
+                    </select>
+                </div>
+            </div>
+            <div class="shop-grid">
+                <!-- Madurai Shops -->
+                <div class="shop-card" data-categories="men,accessories" data-location="madurai">
+                    <div class="shop-image">
+                        <img src="https://img.freepik.com/free-photo/interior-clothing-store-with-stylish-merchandise-racks-fashionable-brand-design-casual-wear-modern-boutique-empty-fashion-showroom-shopping-centre-with-elegant-merchandise_482257-65537.jpg" alt="Fashion Point Store">
+                    </div>
+                    <div class="shop-info">
+                        <h3>Fashion Point</h3>
+                        <div class="shop-categories">
+                            <span class="category-tag men">Men's Clothing</span>
+                            <span class="category-tag accessories">Accessories</span>
+                        </div>
+                        <div class="shop-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Anna Nagar, Madurai</span>
+                        </div>
+                        <div class="featured-items">
+                            <strong>Featured Items:</strong>
+                            Men's T-shirts, Jeans, Casual Shirts
+                        </div>
+                        <a href="shop-details.html?id=1" class="btn btn-outline" style="width: 100%">View Shop</a>
+                    </div>
+                </div>
+                <div class="shop-card" data-categories="women" data-location="madurai">
+                    <div class="shop-image">
+                        <img src="https://c8.alamy.com/comp/J6GKX4/colourful-saree-textile-cloth-shop-in-the-streets-of-little-indiapenanggeorge-J6GKX4.jpg" alt="Saree Paradise">
+                    </div>
+                    <div class="shop-info">
+                        <h3>Saree Paradise</h3>
+                        <div class="shop-categories">
+                            <span class="category-tag women">Women's Clothing</span>
+                        </div>
+                        <div class="shop-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>East Masi Street, Madurai</span>
+                        </div>
+                        <div class="featured-items">
+                            <strong>Featured Items:</strong>
+                            Silk Sarees, Designer Blouses, Kurtis
+                        </div>
+                        <a href="shop-details.html?id=5" class="btn btn-outline" style="width: 100%">View Shop</a>
+                    </div>
+                </div>
+                <div class="shop-card" data-categories="kids" data-location="madurai">
+                    <div class="shop-image">
+                        <img src="https://img.freepik.com/free-photo/children-s-bright-clothes-hang-display-baby-clothing-store-girls-section_627829-6483.jpg?semt=ais_hybrid&w=740" alt="Little Stars">
+                    </div>
+                    <div class="shop-info">
+                        <h3>Little Stars</h3>
+                        <div class="shop-categories">
+                            <span class="category-tag kids">Kids' Clothing</span>
+                        </div>
+                        <div class="shop-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>K.K. Nagar, Madurai</span>
+                        </div>
+                        <div class="featured-items">
+                            <strong>Featured Items:</strong>
+                            Kids Party Wear, School Uniforms, Baby Clothes
+                        </div>
+                        <a href="shop-details.html?id=6" class="btn btn-outline" style="width: 100%">View Shop</a>
+                    </div>
+                </div>
+
+                <!-- Krishnankoil Shops -->
+                <div class="shop-card" data-categories="women,accessories" data-location="krishnankoil">
+                    <div class="shop-image">
+                        <img src="https://indiantextilejournal.com/wp-content/uploads/Jaipur-Kurti.jpg" alt="Trendy Threads Store">
+                    </div>
+                    <div class="shop-info">
+                        <h3>Trendy Threads</h3>
+                        <div class="shop-categories">
+                            <span class="category-tag women">Women's Clothing</span>
+                            <span class="category-tag accessories">Accessories</span>
+                        </div>
+                        <div class="shop-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Main Street, Krishnankoil</span>
+                        </div>
+                        <div class="featured-items">
+                            <strong>Featured Items:</strong>
+                            Women's Dresses, Tops, Accessories
+                        </div>
+                        <a href="shop-details.html?id=2" class="btn btn-outline" style="width: 100%">View Shop</a>
+                    </div>
+                </div>
+                <div class="shop-card" data-categories="men" data-location="krishnankoil">
+                    <div class="shop-image">
+                        <img src="https://www.shutterstock.com/shutterstock/videos/3600980853/thumb/1.jpg?ip=x480" alt="Gents World">
+                    </div>
+                    <div class="shop-info">
+                        <h3>Gents World</h3>
+                        <div class="shop-categories">
+                            <span class="category-tag men">Men's Clothing</span>
+                        </div>
+                        <div class="shop-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Temple Road, Krishnankoil</span>
+                        </div>
+                        <div class="featured-items">
+                            <strong>Featured Items:</strong>
+                            Formal Shirts, Trousers, Traditional Wear
+                        </div>
+                        <a href="shop-details.html?id=7" class="btn btn-outline" style="width: 100%">View Shop</a>
+                    </div>
+                </div>
+                <div class="shop-card" data-categories="kids,accessories" data-location="krishnankoil">
+                    <div class="shop-image">
+                        <img src="https://i.pinimg.com/736x/2f/74/29/2f7429fed02c48a3d346a201e029eeb1.jpg" alt="Kids Fashion Hub">
+                    </div>
+                    <div class="shop-info">
+                        <h3>Kids Fashion Hub</h3>
+                        <div class="shop-categories">
+                            <span class="category-tag kids">Kids' Clothing</span>
+                            <span class="category-tag accessories">Accessories</span>
+                        </div>
+                        <div class="shop-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Market Street, Krishnankoil</span>
+                        </div>
+                        <div class="featured-items">
+                            <strong>Featured Items:</strong>
+                            Kids Wear, School Bags, Hair Accessories
+                        </div>
+                        <a href="shop-details.html?id=8" class="btn btn-outline" style="width: 100%">View Shop</a>
+                    </div>
+                </div>
+
+                <!-- Srivilliputhur Shops -->
+                <div class="shop-card" data-categories="kids" data-location="srivilliputhur">
+                    <div class="shop-image">
+                        <img src="https://image.made-in-china.com/202f0j00BkbfGqZJlVcM/Kids-Boys-Girls-Primary-School-Uniforms-3PCS-International-Summer-School-Uniform-Design.webp" alt="Kids Corner Store">
+                    </div>
+                    <div class="shop-info">
+                        <h3>Kids Corner</h3>
+                        <div class="shop-categories">
+                            <span class="category-tag kids">Kids' Clothing</span>
+                        </div>
+                        <div class="shop-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Temple Street, Srivilliputhur</span>
+                        </div>
+                        <div class="featured-items">
+                            <strong>Featured Items:</strong>
+                            Children's Wear, School Uniforms
+                        </div>
+                        <a href="shop-details.html?id=3" class="btn btn-outline" style="width: 100%">View Shop</a>
+                    </div>
+                </div>
+                <div class="shop-card" data-categories="men,women" data-location="srivilliputhur">
+                    <div class="shop-image">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTq6KUb60UgMsU_Rj6GzK--JLgz6HayWczrRw&s" alt="Family Fashion">
+                    </div>
+                    <div class="shop-info">
+                        <h3>Family Fashion</h3>
+                        <div class="shop-categories">
+                            <span class="category-tag men">Men's Clothing</span>
+                            <span class="category-tag women">Women's Clothing</span>
+                        </div>
+                        <div class="shop-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Main Road, Srivilliputhur</span>
+                        </div>
+                        <div class="featured-items">
+                            <strong>Featured Items:</strong>
+                            Family Wear, Traditional Clothing, Festival Collections
+                        </div>
+                        <a href="shop-details.html?id=9" class="btn btn-outline" style="width: 100%">View Shop</a>
+                    </div>
+                </div>
+                <div class="shop-card" data-categories="accessories" data-location="srivilliputhur">
+                    <div class="shop-image">
+                        <img src="https://www.darveys.com/blog/wp-content/uploads/2024/08/The-25-Most-Expensive-Sneakers-in-the-World.jpg" alt="Style Hub">
+                    </div>
+                    <div class="shop-info">
+                        <h3>Style Hub</h3>
+                        <div class="shop-categories">
+                            <span class="category-tag accessories">Accessories</span>
+                        </div>
+                        <div class="shop-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Gandhi Road, Srivilliputhur</span>
+                        </div>
+                        <div class="featured-items">
+                            <strong>Featured Items:</strong>
+                            Jewelry, Bags, Footwear, Fashion Accessories
+                        </div>
+                        <a href="shop-details.html?id=10" class="btn btn-outline" style="width: 100%">View Shop</a>
+                    </div>
+                </div>
+
+                <!-- Rajapalayam Shops -->
+                <div class="shop-card" data-categories="women,accessories" data-location="rajapalayam">
+                    <div class="shop-image">
+                        <img src="https://assets.myntassets.com/h_1440,q_100,w_1080/v1/assets/images/24865792/2023/10/4/2f7f7251-0d0b-4cb5-b0ce-19acbe3f57771696415933351-Anayna-Women-Printed-A-Line-Flared-Cotton-Maxi-Skirt-3831696-7.jpg" alt="Urban Style Store">
+                    </div>
+                    <div class="shop-info">
+                        <h3>Urban Style</h3>
+                        <div class="shop-categories">
+                            <span class="category-tag women">Women's Clothing</span>
+                            <span class="category-tag accessories">Accessories</span>
+                        </div>
+                        <div class="shop-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Market Road, Rajapalayam</span>
+                        </div>
+                        <div class="featured-items">
+                            <strong>Featured Items:</strong>
+                            Women's Tops, Skirts, Accessories
+                        </div>
+                        <a href="shop-details.html?id=4" class="btn btn-outline" style="width: 100%">View Shop</a>
+                    </div>
+                </div>
+                <div class="shop-card" data-categories="men" data-location="rajapalayam">
+                    <div class="shop-image">
+                        <img src="https://5.imimg.com/data5/SELLER/Default/2024/9/453603830/MX/JV/JG/15408429/snaya-index-500x500.jpeg" alt="Men's Choice">
+                    </div>
+                    <div class="shop-info">
+                        <h3>Men's Choice</h3>
+                        <div class="shop-categories">
+                            <span class="category-tag men">Men's Clothing</span>
+                        </div>
+                        <div class="shop-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>College Road, Rajapalayam</span>
+                        </div>
+                        <div class="featured-items">
+                            <strong>Featured Items:</strong>
+                            Formal Wear, Casual Wear, Ethnic Collection
+                        </div>
+                        <a href="shop-details.html?id=11" class="btn btn-outline" style="width: 100%">View Shop</a>
+                    </div>
+                </div>
+                <div class="shop-card" data-categories="kids" data-location="rajapalayam">
+                    <div class="shop-image">
+                        <img src="https://m.media-amazon.com/images/I/81OjV4exjEL.jpg" alt="Kids Paradise">
+                    </div>
+                    <div class="shop-info">
+                        <h3>Kids Paradise</h3>
+                        <div class="shop-categories">
+                            <span class="category-tag kids">Kids' Clothing</span>
+                        </div>
+                        <div class="shop-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>New Bus Stand, Rajapalayam</span>
+                        </div>
+                        <div class="featured-items">
+                            <strong>Featured Items:</strong>
+                            Kids Fashion, Party Wear, Baby Essentials
+                        </div>
+                        <a href="shop-details.html?id=12" class="btn btn-outline" style="width: 100%">View Shop</a>
+                    </div>
+                </div>
+
+                <!-- Tenkasi Shops -->
+                <div class="shop-card" data-categories="men,women" data-location="tenkasi">
+                    <div class="shop-image">
+                        <img src="https://lh5.googleusercontent.com/proxy/iyL0dSNltSZy4KhOZ3v2RkKP9LFndpEyn6tH6SXo4iU9ozrI8EYrLcshihoDQfTpizVnIl1pU6B8lIyYHt-SKou1qwIQ6pqJub1za9d4wZ3MvHoWJcf9AJKtTYw" alt="Fashion Gallery">
+                    </div>
+                    <div class="shop-info">
+                        <h3>Fashion Gallery</h3>
+                        <div class="shop-categories">
+                            <span class="category-tag men">Men's Clothing</span>
+                            <span class="category-tag women">Women's Clothing</span>
+                        </div>
+                        <div class="shop-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>South Car Street, Tenkasi</span>
+                        </div>
+                        <div class="featured-items">
+                            <strong>Featured Items:</strong>
+                            Designer Wear, Traditional Clothing, Western Wear
+                        </div>
+                        <a href="shop-details.html?id=13" class="btn btn-outline" style="width: 100%">View Shop</a>
+                    </div>
+                </div>
+                <div class="shop-card" data-categories="kids,accessories" data-location="tenkasi">
+                    <div class="shop-image">
+                        <img src="https://i.ytimg.com/vi/s1tecB0IoQo/maxresdefault.jpg" alt="Kids World">
+                    </div>
+                    <div class="shop-info">
+                        <h3>Kids World</h3>
+                        <div class="shop-categories">
+                            <span class="category-tag kids">Kids' Clothing</span>
+                            <span class="category-tag accessories">Accessories</span>
+                        </div>
+                        <div class="shop-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Five Way Road, Tenkasi</span>
+                        </div>
+                        <div class="featured-items">
+                            <strong>Featured Items:</strong>
+                            Children's Clothing, Toys, School Supplies
+                        </div>
+                        <a href="shop-details.html?id=14" class="btn btn-outline" style="width: 100%">View Shop</a>
+                    </div>
+                </div>
+                <div class="shop-card" data-categories="women" data-location="tenkasi">
+                    <div class="shop-image">
+                        <img src="https://i.pinimg.com/474x/a9/1d/94/a91d947f285df4cdf590e2ecbab12ade.jpg" alt="Ladies Corner">
+                    </div>
+                    <div class="shop-info">
+                        <h3>Ladies Corner</h3>
+                        <div class="shop-categories">
+                            <span class="category-tag women">Women's Clothing</span>
+                        </div>
+                        <div class="shop-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Railway Station Road, Tenkasi</span>
+                        </div>
+                        <div class="featured-items">
+                            <strong>Featured Items:</strong>
+                            Designer Sarees, Churidars, Western Wear
+                        </div>
+                        <a href="shop-details.html?id=15" class="btn btn-outline" style="width: 100%">View Shop</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Filter shops based on category and location selection
+        function filterShops() {
+            const selectedCategory = document.getElementById('category-filter').value;
+            const selectedLocation = document.getElementById('location-filter').value;
+            const shopCards = document.querySelectorAll('.shop-card');
+            
+            shopCards.forEach(card => {
+                const cardCategories = card.getAttribute('data-categories').split(',');
+                const cardLocation = card.getAttribute('data-location');
+                
+                const matchesCategory = selectedCategory === 'all' || cardCategories.includes(selectedCategory);
+                const matchesLocation = selectedLocation === 'all' || cardLocation === selectedLocation;
+                
+                if (matchesCategory && matchesLocation) {
+                    card.classList.add('show');
+                } else {
+                    card.classList.remove('show');
+                }
+            });
+        }
+
+        // Add event listeners for both filters
+        document.getElementById('category-filter').addEventListener('change', filterShops);
+        document.getElementById('location-filter').addEventListener('change', filterShops);
+
+        // Initialize all cards as visible
+        document.querySelectorAll('.shop-card').forEach(card => {
+            card.classList.add('show');
+        });
+
+        // Add animation when filtering
+        const shopCards = document.querySelectorAll('.shop-card');
+        shopCards.forEach(card => {
+            card.addEventListener('transitionend', function() {
+                if (!card.classList.contains('show')) {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html> 
